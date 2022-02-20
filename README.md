@@ -19,5 +19,4 @@ Basic Function:
 
 
 Database Design:
-
-![ProjectDiagram](https://user-images.githubusercontent.com/52240023/154838580-27d8bea8-4320-4570-a93c-76f24f3452af.png)
+![ProjectDiagram](https://user-images.githubusercontent.com/52240023/154851293-28ba08d6-e4fd-4f95-8b13-9e9830d0c0cc.png)
