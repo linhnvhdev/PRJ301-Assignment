@@ -59,4 +59,25 @@ public class AccountDBContext extends DBContext {
         }
         return null;
     }
+    
+    public int getPermission(String username,String url){
+        try {
+            String sql ="SELECT COUNT(*) AS Total\n" +
+            "FROM [Account] a INNER JOIN [User] u ON a.UserId = u.Id\n" +
+            "               INNER JOIN [Role] r ON u.RoleId = r.Id\n" +
+            "               INNER JOIN [Role_Function] rf ON r.Id = rf.RoleId\n" +
+            "               INNER JOIN [Function] f ON rf.FunctionId = f.Id\n" +
+            "WHERE a.Username = ? AND URL = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, username);
+            stm.setString(2, url);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                return rs.getInt("Total");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 }
