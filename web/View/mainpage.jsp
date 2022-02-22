@@ -12,6 +12,21 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <!-----------------------------  Heading---------------------------- -->
+        <div id="heading" >
+            <h1>Hệ Thống Quản lí Bán trú trường THCS Lê Quý Đôn</h1>
+        </div>
+        <!-----------------------------  Heading---------------------------- -->
+        <div id="main-content">
+            <a href="#">Xem thông báo</a>
+            <a href="#">Thông tin nhà ăn/ở</a>
+            <a href="#">Quản lí học sinh</a>
+            <a href="#">Điểm danh</a>
+            <a href="#">Báo cáo</a>
+            <a href="#">Liên lạc</a>
+        </div>
+        <div id="footer">
+            <h1>footer</h1>
+        </div>     
     </body>
 </html>
