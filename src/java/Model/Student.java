@@ -9,35 +9,37 @@ package Model;
  *
  * @author Linhnvhdev
  */
-public class Student extends User {
+public class Student extends User implements Comparable<Student> {
     private int roomId;
-    private int classId;
-    private Teacher teacher;
-
+    private Classes classes;
     public Student() {
     }
     
-    public Student(int roomId, int classId,Teacher teacher, int id, String name, boolean sex, String phoneNumber, String gmail) {
+    public Student(int roomId, Classes classes, int id, String name, boolean sex, String phoneNumber, String gmail) {
         super(id, name, sex, phoneNumber, gmail);
         this.roomId = roomId;
-        this.teacher = teacher;
-        this.classId = classId;
+        this.classes = classes;
     }
 
     public int getRoomId() {
         return roomId;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
     public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public Classes getClasses() {
+        return classes;
+    }
+
+    public void setClass(Classes classes) {
+        this.classes = classes;
+    }
+
+    @Override
+    public int compareTo(Student t) {
+        return this.getClasses().getId() - t.getClasses().getId();
     }
 
     

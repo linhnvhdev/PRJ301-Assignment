@@ -9,23 +9,23 @@ package Model;
  *
  * @author Linhnvhdev
  */
-class Teacher extends User {
-    private int classId;
+public class Teacher extends User {
+    private Classes classes;
 
     public Teacher() {
     }
 
-    public Teacher(int classId, int id, String name, boolean sex, String phoneNumber, String gmail) {
+    public Teacher(Classes classes, int id, String name, boolean sex, String phoneNumber, String gmail) {
         super(id, name, sex, phoneNumber, gmail);
-        this.classId = classId;
+        this.classes = classes;
     }
 
-    public int getClassId() {
-        return classId;
+    public Classes getClasses() {
+        return classes;
     }
 
-    public void setClassId(int classId) {
-        this.classId = classId;
+    public void setClasses(Classes classes) {
+        this.classes = classes;
     }
     
     
