@@ -9,14 +9,14 @@ package Model;
  *
  * @author Linhnvhdev
  */
-public class Class {
+public class Classes {
     private int id;
     private String name;
 
-    public Class() {
+    public Classes() {
     }
 
-    public Class(int id, String name) {
+    public Classes(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -36,5 +36,4 @@ public class Class {
     public void setName(String name) {
         this.name = name;
     }
-    
 }
