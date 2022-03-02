@@ -20,7 +20,9 @@
         <script>
             function deleteStudent(id){
                 var result = confirm("Are you sure?");
-                if(result) document.getElementById("delStudent").submit();
+                if(result){
+                    window.location.href = "delete?studentIdDel="+id;
+                }
             }
             
             function displayForm(id){
@@ -94,7 +96,7 @@
                     Student s = students.get(i);
                 %>
                 <tr>
-                    <td><%=i+1%></td>
+                    <td><%=s.getId()%></td>
                     <td><%=s.getName()%></td>
                     <td><%=s.getClasses().getName()%></td>
                     <td><%=(s.isSex())?"Nam":"Nữ"%></td>
@@ -108,12 +110,9 @@
                         </form>
                     </td>
                     <td>
-                        <form action="delete" method="GET" id="delStudent">
-                            <input type="hidden" name="studentId" value="<%=s.getId()%>">
-                            <button type="button" onclick="deleteStudent()">
-                                Xóa
-                            </button>
-                        </form>
+                        <button type="button" onclick="deleteStudent(<%=s.getId()%>)">
+                            Xóa
+                        </button>
                     </td>
                 </tr>
                 <%}%>

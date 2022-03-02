@@ -31,7 +31,7 @@ public class DeleteStudent extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int studentId = Integer.parseInt(request.getParameter("studentId"));
+        int studentId = Integer.parseInt(request.getParameter("studentIdDel"));
         //Delete
         UserDBContext userDB = new UserDBContext();
         StudentDBContext studentDB = new StudentDBContext();
