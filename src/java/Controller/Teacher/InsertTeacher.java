@@ -3,13 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.Student;
+package Controller.Teacher;
 
 import Dal.AccountDBContext;
+import Dal.ClassDBContext;
 import Dal.StudentDBContext;
+import Dal.TeacherDBContext;
 import Dal.UserDBContext;
+import Model.Classes;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,30 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Linhnvhdev
  */
-public class DeleteStudent extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int studentId = Integer.parseInt(request.getParameter("studentIdDel"));
-        //Delete
-        UserDBContext userDB = new UserDBContext();
-        StudentDBContext studentDB = new StudentDBContext();
-        AccountDBContext accDB = new AccountDBContext();
-        int userId = studentDB.getUser(studentId);
-        studentDB.delete(studentId);
-        accDB.deleteAccount(userId);
-        userDB.delete(userId);
-        response.sendRedirect("search");
-    }
+public class InsertTeacher extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -56,7 +37,10 @@ public class DeleteStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ClassDBContext classDB = new ClassDBContext();
+        ArrayList<Classes> classes = classDB.getClasses();
+        request.setAttribute("classes", classes);
+        request.getRequestDispatcher("../View/Teacher/insert.jsp").forward(request, response);
     }
 
     /**
@@ -70,7 +54,27 @@ public class DeleteStudent extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Get raw data
+        String raw_name = request.getParameter("name");
+        String raw_gender = request.getParameter("gender");
+        String raw_classId = request.getParameter("classId");
+        String raw_phoneNumber = request.getParameter("phoneNumber");
+        String raw_gmail = request.getParameter("gmail");
+        //Validate data
+        String name = raw_name;
+        boolean gender = Boolean.parseBoolean(raw_gender);
+        int classId = Integer.parseInt(raw_classId);
+        String phoneNumber = raw_phoneNumber;
+        String gmail = raw_gmail;
+        //Insert
+        UserDBContext userDB = new UserDBContext();
+        TeacherDBContext teacherDB = new TeacherDBContext();
+        AccountDBContext accountDB = new AccountDBContext();
+        //
+        int userId = userDB.insertUser(name, gender, phoneNumber, gmail, "teacher");
+        int teacherId = teacherDB.insertTeacher(classId,userId);
+        accountDB.createAccount(name.replaceAll("\\s","")+teacherId,"12345678", userId);
+        response.sendRedirect("list");
     }
 
     /**

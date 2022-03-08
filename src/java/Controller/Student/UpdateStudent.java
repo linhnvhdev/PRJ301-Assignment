@@ -8,6 +8,7 @@ package Controller.Student;
 import Dal.ClassDBContext;
 import Dal.StudentDBContext;
 import Dal.UserDBContext;
+import Model.Account;
 import Model.Classes;
 import Model.Student;
 import java.io.IOException;
@@ -57,6 +58,7 @@ public class UpdateStudent extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Account account = (Account) request.getSession().getAttribute("account");
         // Get raw data
         String raw_studentId = request.getParameter("studentId");
         String raw_name = request.getParameter("name");
@@ -75,7 +77,8 @@ public class UpdateStudent extends HttpServlet {
         UserDBContext userDB = new UserDBContext();
         StudentDBContext studentDB = new StudentDBContext();
         int userId = studentDB.getUser(studentId);
-        userDB.update(userId,name, gender, phoneNumber, "none", "student");
+        userDB.update(userId,name, gender, phoneNumber, "none", 4);
+        
         studentDB.update(studentId,classId,userId,roomId);
         response.sendRedirect("search");
     }

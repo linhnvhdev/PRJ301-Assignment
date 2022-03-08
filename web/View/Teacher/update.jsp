@@ -1,6 +1,6 @@
 <%-- 
     Document   : update
-    Created on : Feb 28, 2022, 11:25:39 PM
+    Created on : Mar 3, 2022, 10:43:32 PM
     Author     : Linhnvhdev
 --%>
 
@@ -14,44 +14,34 @@
     </head>
     <body>
         <form action="update" method="POST">
-            <input type="hidden" name="studentId" value="${requestScope.student.id}">
+            <input type="hidden" name="teacherId" value="${requestScope.teacher.id}">
             <div>
-                Tên: <input type="text" name = "name" value="${requestScope.student.name}">
+                Tên: <input type="text" name = "name" value="${requestScope.teacher.name}">
             </div>
             <div>
             Lớp: <select name="classId">
                 <c:forEach items="${requestScope.classes}" var="c">
                     <option
-                        ${(requestScope.student.classes.id == c.id)?"selected=\"selected\"":""}
+                        ${(requestScope.teacher.classes.id == c.id)?"selected=\"selected\"":""}
                         value="${c.id}">${c.name}</option>
                 </c:forEach>
                 </select>
             </div>
             <div>
                 Giới Tính: <input type="radio"
-                            ${(requestScope.student.sex)?"checked":""}
+                            ${(requestScope.teacher.sex)?"checked":""}
                             name="gender" value = "true">Male
                     <input type="radio" 
-                            ${(!requestScope.student.sex)?"checked":""}
+                            ${(!requestScope.teacher.sex)?"checked":""}
                             name="gender" value = "false">Female
             </div>
             <div>
-            Số điện thoại: <input type="text" name="phoneNumber" value="${requestScope.student.phoneNumber}"><br>
+                Số điện thoại: <input type="text" name="phoneNumber" value="${requestScope.teacher.phoneNumber}"><br>
             </div>
             <div>
-            Phòng: <select name="roomId">
-                <option 
-                    ${(requestScope.student.roomId == 0)?"selected=\"selected\"":""}
-                    value="0">Chưa xếp</option> 
-                <c:forEach var="i" begin="1" end="6">
-                <option 
-                    ${(requestScope.student.roomId == i)?"selected=\"selected\"":""}
-                    value=${i}>${i}</option>
-                </c:forEach>
-            </select>
+                Gmail: <input type="text" name="gmail" value="${requestScope.teacher.gmail}"><br>
             </div>
             <input type="submit" value="Sửa">
         </form>
     </body>
 </html>
-

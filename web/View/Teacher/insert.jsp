@@ -1,6 +1,6 @@
 <%-- 
     Document   : insert
-    Created on : Feb 9, 2022, 3:33:23 PM
+    Created on : Mar 3, 2022, 10:41:41 PM
     Author     : Linhnvhdev
 --%>
 
@@ -32,15 +32,7 @@
             Số điện thoại: <input type="text" name="phoneNumber"><br>
             </div>
             <div>
-            Phòng: <select name="roomId">
-                <option value="0">Chưa xếp</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
+            Gmail: <input type="text" name="gmail"><br>
             </div>
             <input type="submit" value="Thêm">
         </form>

@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.Student;
+package Controller.Teacher;
 
 import Dal.AccountDBContext;
 import Dal.StudentDBContext;
+import Dal.TeacherDBContext;
 import Dal.UserDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Linhnvhdev
  */
-public class DeleteStudent extends HttpServlet {
+public class DeleteController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,16 +33,16 @@ public class DeleteStudent extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int studentId = Integer.parseInt(request.getParameter("studentIdDel"));
+        int teacherId = Integer.parseInt(request.getParameter("teacherIdDel"));
         //Delete
         UserDBContext userDB = new UserDBContext();
-        StudentDBContext studentDB = new StudentDBContext();
         AccountDBContext accDB = new AccountDBContext();
-        int userId = studentDB.getUser(studentId);
-        studentDB.delete(studentId);
+        TeacherDBContext teacherDB = new TeacherDBContext();
+        int userId = teacherDB.getUserId(teacherId);
+        teacherDB.delete(teacherId);
         accDB.deleteAccount(userId);
         userDB.delete(userId);
-        response.sendRedirect("search");
+        response.sendRedirect("list");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

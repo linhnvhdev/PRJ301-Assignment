@@ -21,6 +21,7 @@
             <a href="#">Xem thông báo</a>
             <a href="#">Thông tin nhà ăn/ở</a>
             <a href="student/search">Quản lí học sinh</a>
+            <a href="teacher/list">Giáo viên</a>
             <a href="#">Điểm danh</a>
             <a href="#">Báo cáo</a>
             <a href="#">Liên lạc</a>
