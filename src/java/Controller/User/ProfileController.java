@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.Student;
+package Controller.User;
 
-import Dal.AccountDBContext;
 import Dal.StudentDBContext;
+import Dal.TeacherDBContext;
 import Dal.UserDBContext;
+import Model.Account;
+import Model.Student;
+import Model.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,30 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Linhnvhdev
  */
-public class DeleteStudent extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int studentId = Integer.parseInt(request.getParameter("studentIdDel"));
-        //Delete
-        UserDBContext userDB = new UserDBContext();
-        StudentDBContext studentDB = new StudentDBContext();
-        AccountDBContext accDB = new AccountDBContext();
-        int userId = studentDB.getUser(studentId);
-        studentDB.delete(studentId);
-        accDB.deleteAccount(userId);
-        userDB.delete(userId);
-        response.sendRedirect("search");
-    }
+public class ProfileController extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -56,7 +36,21 @@ public class DeleteStudent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        Account account = (Account) request.getSession().getAttribute("account");
+        int userId = account.getUser().getId();
+        UserDBContext userDB = new UserDBContext();
+        account.setUser(userDB.getUser(userId));
+        if(account.getUser().getRole() == 3){
+            TeacherDBContext teacherDB = new TeacherDBContext();
+            Teacher teacher = teacherDB.getTeacherByUserId(userId);
+            request.setAttribute("teacher", teacher);
+        }
+        else if(account.getUser().getRole() == 4){
+            StudentDBContext studentDB = new StudentDBContext();
+            Student student = studentDB.getStudentByUserId(userId);
+            request.setAttribute("student", student);
+        }
+        request.getRequestDispatcher("View/User/profile.jsp").forward(request, response);
     }
 
     /**
@@ -70,7 +64,6 @@ public class DeleteStudent extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

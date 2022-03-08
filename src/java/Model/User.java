@@ -15,6 +15,7 @@ public class User {
     private boolean sex;
     private String phoneNumber;
     private String gmail;
+    private int role;
 
     public User() {
     }
@@ -65,6 +66,14 @@ public class User {
 
     public void setGmail(String gmail) {
         this.gmail = gmail;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
     
     

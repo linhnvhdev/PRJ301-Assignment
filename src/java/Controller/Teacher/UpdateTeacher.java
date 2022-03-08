@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.Student;
+package Controller.Teacher;
 
-import Dal.AccountDBContext;
 import Dal.ClassDBContext;
 import Dal.StudentDBContext;
+import Dal.TeacherDBContext;
 import Dal.UserDBContext;
 import Model.Classes;
+import Model.Student;
+import Model.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -22,7 +24,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Linhnvhdev
  */
-public class InsertController extends HttpServlet {
+public class UpdateTeacher extends HttpServlet {
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -35,10 +38,14 @@ public class InsertController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int teacherId = Integer.parseInt(request.getParameter("teacherId"));
         ClassDBContext classDB = new ClassDBContext();
         ArrayList<Classes> classes = classDB.getClasses();
+        TeacherDBContext teacherDB = new TeacherDBContext();
+        Teacher teacher = teacherDB.getTeacher(teacherId);
         request.setAttribute("classes", classes);
-        request.getRequestDispatcher("../View/Student/insert.jsp").forward(request, response);
+        request.setAttribute("teacher", teacher);
+        request.getRequestDispatcher("../View/Teacher/update.jsp").forward(request, response);        
     }
 
     /**
@@ -53,26 +60,26 @@ public class InsertController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get raw data
+        String raw_teacherId = request.getParameter("teacherId");
         String raw_name = request.getParameter("name");
         String raw_gender = request.getParameter("gender");
         String raw_classId = request.getParameter("classId");
         String raw_phoneNumber = request.getParameter("phoneNumber");
-        String raw_roomId = request.getParameter("roomId");
+        String raw_gmail = request.getParameter("gmail");
         //Validate data
+        int teacherId = Integer.parseInt(raw_teacherId);
         String name = raw_name;
         boolean gender = Boolean.parseBoolean(raw_gender);
         int classId = Integer.parseInt(raw_classId);
         String phoneNumber = raw_phoneNumber;
-        int roomId = Integer.parseInt(raw_roomId);
-        //Insert
+        String gmail = raw_gmail;
+        //Update
         UserDBContext userDB = new UserDBContext();
-        StudentDBContext studentDB = new StudentDBContext();
-        AccountDBContext accountDB = new AccountDBContext();
-        
-        int userId = userDB.insertUser(name, gender, phoneNumber, "none", "student");
-        int studentId = studentDB.insertStudent(classId,userId,roomId);
-        accountDB.createAccount(name.replaceAll("\\s","")+studentId,"12345678", userId);
-        response.sendRedirect("search");
+        TeacherDBContext teacherDB = new TeacherDBContext();
+        int userId = teacherDB.getUserId(teacherId);
+        userDB.update(userId,name, gender, phoneNumber, gmail, 3);
+        teacherDB.update(teacherId,classId,userId);
+        response.sendRedirect("list");
     }
 
     /**

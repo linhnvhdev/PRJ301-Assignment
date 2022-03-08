@@ -67,8 +67,9 @@ public class SearchController extends HttpServlet {
         //Validate data
         String name = (raw_name == null || raw_name.trim().length() == 0)?"none":raw_name;
         String gender = (raw_gender == null || raw_gender.trim().length() == 0)?"none":raw_gender;
-        int classId = (raw_classId == null)?-1:Integer.parseInt(raw_classId);
-        String phoneNumber = (raw_phoneNumber == null || raw_phoneNumber.trim().length() == 0)?"none":raw_phoneNumber;
+        int classId = (raw_classId == null || raw_classId.trim().length() == 0)?-1:Integer.parseInt(raw_classId);
+        String phoneNumber = "none";
+        String gmail = "none";
         int roomId = (raw_roomId == null)?-1:Integer.parseInt(raw_roomId);
         //Initialize
         UserDBContext userDB = new UserDBContext();
@@ -77,7 +78,7 @@ public class SearchController extends HttpServlet {
         
         // Search
         
-        ArrayList<Integer> usersId = userDB.getUser(name,gender,phoneNumber,"none","student");
+        ArrayList<Integer> usersId = userDB.getUser(name,gender,phoneNumber,gmail,"student");
         ArrayList<Student> students = new ArrayList();
         for(int uid : usersId){
             Student s = studentDB.getStudentByUserId(uid);
@@ -86,8 +87,8 @@ public class SearchController extends HttpServlet {
                     students.add(s);
             }
         }
-        request.setAttribute("students", students);
         Collections.sort(students);
+        request.setAttribute("students", students);
         ArrayList<Classes> classes = classDB.getClasses();
         request.setAttribute("classes", classes);
         request.getRequestDispatcher("../View/Student/search.jsp").forward(request, response);

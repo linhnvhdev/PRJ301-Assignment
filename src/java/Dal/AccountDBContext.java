@@ -18,14 +18,13 @@ import java.util.logging.Logger;
  * @author Linhnvhdev
  */
 public class AccountDBContext extends DBContext {
-    public boolean isAccountExist(String username, String password){
+    public boolean isAccountExist(String username){
         try {
             String sql ="SELECT COUNT(*) AS Total\n" +
             "FROM Account\n" +
-            "WHERE [Username] = ? AND [Password] = ?";
+            "WHERE [Username] = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, username);
-            stm.setString(2, password);
             ResultSet rs = stm.executeQuery();
             if(rs.next()){
                 return (rs.getInt("Total") > 0);
@@ -49,8 +48,8 @@ public class AccountDBContext extends DBContext {
                 Account acc = new Account();
                 acc.setUsername(rs.getString("Username"));
                 acc.setPassword(rs.getString("Password"));
-                User user = new User();
-                user.setId(rs.getInt("UserId"));
+                UserDBContext userDB = new UserDBContext();
+                User user = userDB.getUser(rs.getInt("UserId"));
                 acc.setUser(user);
                 return acc;
             }
@@ -79,5 +78,51 @@ public class AccountDBContext extends DBContext {
             Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
+    }
+
+    public void createAccount(String username, String password, int userId) {
+        try {
+            String sql="INSERT INTO [PRJ301-Assignment].[dbo].[Account]\n" +
+            "           ([Username]\n" +
+            "           ,[Password]\n" +
+            "           ,[UserId])\n" +
+            "     VALUES\n" +
+            "           (?\n" +
+            "           ,?\n" +
+            "           ,?)";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, username);
+            stm.setString(2, password);
+            stm.setInt(3, userId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    }
+    
+    public void deleteAccount(int userId){
+        try {
+            String sql="DELETE FROM [PRJ301-Assignment].[dbo].[Account]\n" +
+                    "      WHERE UserId = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, userId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void changePassword(String username, String passwordNew) {
+        try {
+            String sql = "UPDATE [PRJ301-Assignment].[dbo].[Account]\n" +
+                    "   SET [Password] = ?\n" +
+                    " WHERE Username = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, passwordNew);
+            stm.setString(2, username);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

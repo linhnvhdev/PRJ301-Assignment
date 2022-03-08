@@ -9,7 +9,7 @@ package Model;
  *
  * @author Linhnvhdev
  */
-public class Teacher extends User {
+public class Teacher extends User implements Comparable<Teacher> {
     private Classes classes;
 
     public Teacher() {
@@ -27,6 +27,12 @@ public class Teacher extends User {
     public void setClasses(Classes classes) {
         this.classes = classes;
     }
+
+    @Override
+    public int compareTo(Teacher t) {
+        return this.getClasses().getId() - t.getClasses().getId();
+    }
+
     
     
 }

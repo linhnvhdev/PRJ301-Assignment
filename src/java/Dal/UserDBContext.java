@@ -5,6 +5,7 @@
  */
 package Dal;
 
+import Model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,7 +78,7 @@ public class UserDBContext extends DBContext {
         return roleId;
     }
 
-    public void update(int userId, String name, boolean gender, String phoneNumber, String gmail, String role) {
+    public void update(int userId, String name, boolean gender, String phoneNumber, String gmail, int role) {
         try {
             String sql="UPDATE [PRJ301-Assignment].[dbo].[User]\n" +
             "   SET [Name] = ?\n" +
@@ -91,7 +92,7 @@ public class UserDBContext extends DBContext {
             stm.setBoolean(2, gender);
             stm.setString(3, phoneNumber);
             stm.setString(4, gmail);
-            stm.setInt(5, getRoleId(role));
+            stm.setInt(5, role);
             stm.setInt(6, userId);
             stm.executeUpdate();
         } catch (SQLException ex) {
@@ -145,5 +146,33 @@ public class UserDBContext extends DBContext {
             Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userIds;
+    }
+    
+    public User getUser(int userId){
+        User u = new User();
+        try {    
+            String sql="SELECT [Id]\n" +
+                    "      ,[Name]\n" +
+                    "      ,[Sex]\n" +
+                    "      ,[PhoneNumber]\n" +
+                    "      ,[Gmail]\n" +
+                    "      ,[RoleId]\n" +
+                    "  FROM [PRJ301-Assignment].[dbo].[User]\n" +
+                    "  WHERE Id=?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, userId);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                u.setId(rs.getInt("Id"));
+                u.setName(rs.getString("Name"));
+                u.setSex(rs.getBoolean("Sex"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setGmail(rs.getString("Gmail"));
+                u.setRole(rs.getInt("RoleId"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return u;
     }
 }
