@@ -20,6 +20,18 @@ import java.util.logging.Logger;
  */
 public class TeacherDBContext extends DBContext {
     
+        public int getLastInserted(){
+        try {
+            String sql="SELECT MAX(Id) maxId FROM [Teacher]";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()) return rs.getInt("maxId");
+        } catch (SQLException ex) {
+            Logger.getLogger(TeacherDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+    
     public Teacher getTeacherByClassId(int classId){
         try {
             String sql="SELECT t.Id,u.Name,u.PhoneNumber,u.Sex,u.Gmail,t.ClassId\n" +
@@ -110,7 +122,7 @@ public class TeacherDBContext extends DBContext {
             stm.setInt(1, userId);
             stm.setInt(2, classId);
             stm.executeUpdate();
-            return 1;
+            return getLastInserted();
         } catch (SQLException ex) {
             Logger.getLogger(TeacherDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }

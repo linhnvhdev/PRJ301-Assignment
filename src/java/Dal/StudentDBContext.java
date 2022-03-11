@@ -183,4 +183,34 @@ public class StudentDBContext extends DBContext{
         }
         return s;        
     }
+
+    public ArrayList<Student> getStudentsByClass(int classId) {
+        ArrayList<Student> students = new ArrayList<>();
+        try {
+            String sql = "SELECT s.Id,u.Name,s.ClassId,s.RoomId,\n" +
+            "		u.PhoneNumber,u.Sex,u.Gmail\n" +
+            "FROM Student s INNER JOIN [User] u ON s.UserId = u.Id\n" +
+            "WHERE s.ClassId = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, classId);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                Student s = new Student();
+                s.setId(rs.getInt("Id"));
+                s.setName(rs.getString("Name"));
+                ClassDBContext classDB = new ClassDBContext();
+                Classes c = classDB.getClasses(rs.getInt("ClassId"));
+                s.setClass(c);
+                s.setRoomId(rs.getInt("RoomId"));
+                s.setPhoneNumber(rs.getString("PhoneNumber"));
+                s.setSex(rs.getBoolean("Sex"));
+                s.setGmail(rs.getString("Gmail"));
+                students.add(s);
+            }
+            return students;
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return students;
+    }
 }
