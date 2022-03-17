@@ -57,10 +57,13 @@
                     var days = getDaysInMonth(${month},${year});
                     for(let i = 0;i < days.length;i++){
                         if(days[i].getDay() > 0 && days[i].getDay() < 6){
-                            document.write("<td>"+getDaysOfWeek(days[i])+ " "+days[i]+"</td>\n");
+                               document.write("<td>"+getDaysOfWeek(days[i])+"</td>\n");
                         }
                     }
                 </script>
+                <td>Tổng số ngày ăn</td>
+                <td>Tiền đóng</td>
+                <td>Thừa/Thiếu</td>
                 </tr>
                 <c:forEach items="${requestScope.students}" var="s">
                 <tr>
@@ -70,15 +73,29 @@
                 <script>
                     <c:forEach var="i" begin="0" end="${requestScope.daysInMonth-1}">
                         if(days[${i}].getDay() > 0 && days[${i}].getDay() < 6){
-                            let a = ${requestScope.attendances.get(s.id).get(i)};
-                            if(a === -1) document.write("<td style=\"background-color: grey\""+a+"</td>");
-                            if(a === 0)  document.write("<td style=\"background-color: red\""+a+"</td>");
-                            if(a === 1)  document.write("<td style=\"background-color: green\""+a+"</td>");
+                                let a = ${requestScope.attendances.get(s.id).get(i)};
+                                if(a === -1) document.write("<td style=\"background-color: grey\""+a+"</td>");
+                                if(a === 0)  document.write("<td style=\"background-color: red\""+a+"</td>");
+                                if(a === 1)  document.write("<td style=\"background-color: green\""+a+"</td>");
                         }
                     </c:forEach>
-                </script>                    
+                </script>
+                <td>${requestScope.totalAttendance.get(s.id)}</td>
+                <td>${requestScope.orders.get(s.id)?initParam.MoneyPerMonth:"Chưa đóng"}</td>
+                <td>${(requestScope.orders.get(s.id)?initParam.MoneyPerMonth:0)-requestScope.totalAttendance.get(s.id)*initParam.MoneyPerDay}</td>
                 </tr>
                 </c:forEach>
+                <tr>
+                    <td colspan="3">Tổng</td>
+                    <script>
+                        <c:forEach var="i" begin="0" end="${requestScope.daysInMonth-1}">
+                            if(days[${i}].getDay() > 0 && days[${i}].getDay() < 6){
+                                    document.write("<td>"+${requestScope.totalPerDay[i]}+"</td>");
+                            }
+                        </c:forEach>
+                    </script>
+                    <td>${requestScope.totalDayEaten}</td>
+                </tr>
             </table>
         </c:if>
     </body>

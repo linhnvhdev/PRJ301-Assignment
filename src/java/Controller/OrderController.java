@@ -5,18 +5,18 @@
  */
 package Controller;
 
-import Dal.AttendanceDBContext;
 import Dal.OrderDBContext;
 import Dal.StudentDBContext;
+import Dal.TeacherDBContext;
+import Model.Account;
+import Model.Order;
 import Model.Student;
+import Model.Teacher;
+import Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Linhnvhdev
  */
-public class ReportController extends HttpServlet {
+public class OrderController extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -42,70 +42,50 @@ public class ReportController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get data
+        Account account = (Account) request.getSession().getAttribute("account");
+        User user = account.getUser();
         String raw_month = request.getParameter("month");
         String raw_year = request.getParameter("year");
+        String raw_search = request.getParameter("search");
         LocalDate curDate = LocalDate.now();
         int month = curDate.getMonthValue();
         int year = curDate.getYear();
         int day = curDate.getDayOfMonth();
+        boolean search = false;
         if(raw_month != null) month = Integer.parseInt(raw_month);
         if(raw_year != null) year = Integer.parseInt(raw_year);
+        if(raw_search != null) search = Boolean.parseBoolean(raw_search);
         
-        
-        StudentDBContext studentDB = new StudentDBContext();
         OrderDBContext oDB = new OrderDBContext();
-        AttendanceDBContext attendanceDB = new AttendanceDBContext();
-        ArrayList<Student> students = studentDB.getStudents();
+        StudentDBContext sDB = new StudentDBContext();
+        TeacherDBContext tDB = new TeacherDBContext();
+        ArrayList<Student> students = new ArrayList<>();
+        ArrayList<Student> studentsNoSearch;
         
-        Hashtable<Integer,ArrayList<Integer>> attendances = new Hashtable();
-        Hashtable<Integer,Integer> totalAttendance = new Hashtable();
-        
-        int daysInMonth = Month.of(month).length(true);
-        if(month == 2)
-            if(Year.isLeap(year)) daysInMonth = 29;
-            else daysInMonth = 28;
-        int[] totalPerDay = new int[daysInMonth];
-        Arrays.fill(totalPerDay, 0,0,daysInMonth);
-        int totalDayEaten = 0;
+        if(user.getRole() == 3){
+            Teacher teacher = tDB.getTeacherByUserId(user.getId());
+            studentsNoSearch = sDB.getStudentsByClass(teacher.getClasses().getId());
+            request.setAttribute("teacher", teacher);
+        }
+        else{
+            studentsNoSearch = sDB.getStudents();
+        }
         
         Hashtable<Integer,Boolean> orders = new Hashtable<>();
-        for(Student s: students){
+        for(Student s: studentsNoSearch){
             boolean status =oDB.getOrder(s.getId(),month,year);
-            orders.put(s.getId(),status);
-        }
-        
-        for(Student s: students){
-            LocalDate startDate = LocalDate.of(year, month,1);
-            ArrayList<Integer> status = new ArrayList();
-            int total = 0;
-            for(LocalDate date = startDate; date.getMonthValue() == month; date = date.plusDays(1)){
-                Date sqlDate = Date.valueOf(date);
-                if(attendanceDB.checkAttendance(sqlDate,s.getId())){
-                    int attendanceStatus = attendanceDB.getAttendance(sqlDate, s.getId())?1:0;
-                    status.add(attendanceStatus);
-                    if(date.getDayOfWeek().getValue() >= 1 && date.getDayOfWeek().getValue() <= 5){
-                        total += attendanceStatus;
-                        totalPerDay[date.getDayOfMonth()-1] += attendanceStatus;
-                    }
-                }
-                else status.add(-1);
+            if(!search || !status){
+                students.add(s);
+                orders.put(s.getId(),status);
             }
-            attendances.put(s.getId(), status);
-            totalAttendance.put(s.getId(), total);
         }
-        
-        for(int t: totalPerDay) totalDayEaten += t;
         
         request.setAttribute("month", month);
         request.setAttribute("year", year);
-        request.setAttribute("daysInMonth", daysInMonth);
-        request.setAttribute("attendances", attendances);
-        request.setAttribute("totalAttendance", totalAttendance);
-        request.setAttribute("totalPerDay", totalPerDay);
+        request.setAttribute("search", search);
         request.setAttribute("students", students);
         request.setAttribute("orders", orders);
-        request.setAttribute("totalDayEaten", totalDayEaten);
-        request.getRequestDispatcher("View/report.jsp").forward(request, response);
+        request.getRequestDispatcher("View/order.jsp").forward(request, response);
     }
 
     /**
@@ -119,6 +99,38 @@ public class ReportController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Account account = (Account) request.getSession().getAttribute("account");
+        User user = account.getUser();
+        String raw_month = request.getParameter("month");
+        String raw_year = request.getParameter("year");
+        LocalDate curDate = LocalDate.now();
+        int month = curDate.getMonthValue();
+        int year = curDate.getYear();
+        int day = curDate.getDayOfMonth();
+        if(raw_month != null) month = Integer.parseInt(raw_month);
+        if(raw_year != null) year = Integer.parseInt(raw_year);
+        
+        StudentDBContext sDB = new StudentDBContext();
+        TeacherDBContext tDB = new TeacherDBContext();
+        OrderDBContext oDB = new OrderDBContext();
+        ArrayList<Student> students;
+        
+        if(user.getRole() == 3){
+            Teacher teacher = tDB.getTeacherByUserId(user.getId());
+            students = sDB.getStudentsByClass(teacher.getClasses().getId());
+            request.setAttribute("teacher", teacher);
+        }
+        else{
+            students = sDB.getStudents();
+        }
+        
+        for(Student s : students){
+            String param = "isOrder"+Integer.toString(s.getId());
+            boolean status = (request.getParameter(param) != null);
+            oDB.takeOrder(s.getId(),month,year,status);
+        }
+        
+        response.sendRedirect("order?month="+month+"&year="+year);
     }
 
     /**
