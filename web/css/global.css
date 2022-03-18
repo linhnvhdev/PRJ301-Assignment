@@ -1,0 +1,32 @@
+.header{
+    height: 15vh;
+}
+
+.login-link{
+    font-size: 1.5rem;
+}
+
+.myNavbar{
+    
+}
+
+.welcome{
+    height :73vh;
+}
+
+.myLogin{
+    height: 80vh;
+    
+}
+
+.myLogin form{
+    padding: 50px 40px;
+}
+
+.myLogin form input{
+    width: 30vw;
+}
+
+.myNavbar{
+    background-color: red;
+}
