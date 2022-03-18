@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Linhnvhdev
  */
-public class SearchController extends HttpServlet {
+public class SearchStudent extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -62,7 +62,6 @@ public class SearchController extends HttpServlet {
         String raw_name = request.getParameter("sname");
         String raw_gender = request.getParameter("sgender");
         String raw_classId = request.getParameter("sclassId");
-        String raw_phoneNumber = request.getParameter("sphoneNumber");
         String raw_roomId = request.getParameter("sroomId");
         //Validate data
         String name = (raw_name == null || raw_name.trim().length() == 0)?"none":raw_name;
@@ -88,6 +87,11 @@ public class SearchController extends HttpServlet {
             }
         }
         Collections.sort(students);
+        request.setAttribute("sname", name);
+        request.setAttribute("sgender", gender);
+        request.setAttribute("sclassId", classId);
+        request.setAttribute("sroomId", roomId);
+        
         request.setAttribute("students", students);
         ArrayList<Classes> classes = classDB.getClasses();
         request.setAttribute("classes", classes);

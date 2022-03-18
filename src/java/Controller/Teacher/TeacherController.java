@@ -83,9 +83,14 @@ public class TeacherController extends HttpServlet {
             if(classId == -1 || t.getClasses().getId()== classId)
                 teachers.add(t);
         }
-        request.setAttribute("teachers", teachers);
+        
         Collections.sort(teachers);
         ArrayList<Classes> classes = classDB.getClasses();
+        
+        request.setAttribute("sname", name);
+        request.setAttribute("sgender", gender);
+        request.setAttribute("sclassId", classId);
+        request.setAttribute("teachers", teachers);
         request.setAttribute("classes", classes);
         request.getRequestDispatcher("../View/Teacher/teacher.jsp").forward(request, response);
     }

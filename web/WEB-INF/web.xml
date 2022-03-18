@@ -70,7 +70,7 @@
     </servlet>
     <servlet>
         <servlet-name>InsertController</servlet-name>
-        <servlet-class>Controller.Student.InsertController</servlet-class>
+        <servlet-class>Controller.Student.InsertStudent</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateStudent</servlet-name>
@@ -82,7 +82,7 @@
     </servlet>
     <servlet>
         <servlet-name>SearchController</servlet-name>
-        <servlet-class>Controller.Student.SearchController</servlet-class>
+        <servlet-class>Controller.Student.SearchStudent</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TeacherController</servlet-name>
@@ -90,7 +90,7 @@
     </servlet>
     <servlet>
         <servlet-name>DeleteController</servlet-name>
-        <servlet-class>Controller.Teacher.DeleteController</servlet-class>
+        <servlet-class>Controller.Teacher.DeleteTeacher</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InsertTeacher</servlet-name>
