@@ -132,6 +132,10 @@
         <servlet-name>OrderController</servlet-name>
         <servlet-class>Controller.OrderController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SelfAttendanceController</servlet-name>
+        <servlet-class>Controller.User.SelfAttendanceController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -211,6 +215,10 @@
     <servlet-mapping>
         <servlet-name>OrderController</servlet-name>
         <url-pattern>/order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelfAttendanceController</servlet-name>
+        <url-pattern>/profile/attendance</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

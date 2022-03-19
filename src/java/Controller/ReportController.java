@@ -42,14 +42,19 @@ public class ReportController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get data
+        int moneyPerMonth = Integer.parseInt(request.getServletContext().getInitParameter("MoneyPerMonth"));
+        int moneyPerDay = Integer.parseInt(request.getServletContext().getInitParameter("MoneyPerDay"));
         String raw_month = request.getParameter("month");
         String raw_year = request.getParameter("year");
+        String raw_reportAttendance = request.getParameter("reportAttendance");
         LocalDate curDate = LocalDate.now();
         int month = curDate.getMonthValue();
         int year = curDate.getYear();
         int day = curDate.getDayOfMonth();
+        boolean reportAttendance = true;
         if(raw_month != null) month = Integer.parseInt(raw_month);
         if(raw_year != null) year = Integer.parseInt(raw_year);
+        if(raw_reportAttendance != null) reportAttendance = Boolean.parseBoolean(raw_reportAttendance);
         
         
         StudentDBContext studentDB = new StudentDBContext();
@@ -59,6 +64,7 @@ public class ReportController extends HttpServlet {
         
         Hashtable<Integer,ArrayList<Integer>> attendances = new Hashtable();
         Hashtable<Integer,Integer> totalAttendance = new Hashtable();
+        Hashtable<Integer,Boolean> orders = new Hashtable<>();
         
         int daysInMonth = Month.of(month).length(true);
         if(month == 2)
@@ -67,11 +73,13 @@ public class ReportController extends HttpServlet {
         int[] totalPerDay = new int[daysInMonth];
         Arrays.fill(totalPerDay, 0,0,daysInMonth);
         int totalDayEaten = 0;
+        int totalMoneyPay = 0;
+        int totalLeft = 0;
         
-        Hashtable<Integer,Boolean> orders = new Hashtable<>();
         for(Student s: students){
             boolean status =oDB.getOrder(s.getId(),month,year);
             orders.put(s.getId(),status);
+            totalMoneyPay += (status?moneyPerMonth:0);
         }
         
         for(Student s: students){
@@ -95,13 +103,21 @@ public class ReportController extends HttpServlet {
         }
         
         for(int t: totalPerDay) totalDayEaten += t;
+        for(Student s: students){
+            boolean status = orders.get(s.getId());
+            totalMoneyPay += (status)? moneyPerMonth:0;
+            totalLeft += ((status)? moneyPerMonth:0)-totalAttendance.get(s.getId())*moneyPerDay;
+        }
         
         request.setAttribute("month", month);
         request.setAttribute("year", year);
         request.setAttribute("daysInMonth", daysInMonth);
         request.setAttribute("attendances", attendances);
+        request.setAttribute("reportAttendance", reportAttendance);
         request.setAttribute("totalAttendance", totalAttendance);
         request.setAttribute("totalPerDay", totalPerDay);
+        request.setAttribute("totalMoneyPay", totalMoneyPay);
+        request.setAttribute("totalLeft", totalLeft);
         request.setAttribute("students", students);
         request.setAttribute("orders", orders);
         request.setAttribute("totalDayEaten", totalDayEaten);

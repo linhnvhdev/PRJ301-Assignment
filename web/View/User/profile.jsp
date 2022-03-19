@@ -56,7 +56,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                       <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/profile">Thông tin cá nhân</a>
+                          <a class="nav-link" href="${pageContext.request.contextPath}/profile"><strong>Thông tin cá nhân</strong></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/profile/pwd">Đổi mật khẩu</a>
@@ -89,6 +89,30 @@
                     <input type="text" readonly class="form-control-plaintext" id="gender" value="${u.sex?"Nam":"Nữ"}">
                 </div>
             </div>
+            <!-- Giáo viên thêm thông tin lớp -->
+            <c:if test="${u.role == 3}">
+                <div class="row border mt-3">
+                    <label for="class" class="col-sm-2 border col-form-label">Lớp</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="class" value="${teacher.classes.name}">
+                    </div>
+                </div>
+            </c:if>
+            <!-- Học sinh thêm thông tin lớp và phòng -->
+            <c:if test="${u.role == 4}">
+                <div class="row border mt-3">
+                    <label for="class" class="col-sm-2 border col-form-label">Lớp</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="class" value="${student.classes.name}">
+                    </div>
+                </div>
+                <div class="row border mt-3">
+                    <label for="room" class="col-sm-2 border col-form-label">Phòng</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="room" value="${student.roomId}">
+                    </div>
+                </div>    
+            </c:if>    
             <div class="row border mt-3">
                 <label for="phone" class="col-sm-2 border col-form-label">SĐT</label>
                 <div class="col-sm-10">
@@ -103,6 +127,9 @@
             </div>
             <div class="mt-3"> 
                 <a class="btn btn-primary" href="profile/update">Sửa thông tin</a>
+                <c:if test="${u.role == 4}">
+                    <a class="btn btn-warning" href="profile/attendance">Xem tình trạng điểm danh</a>
+                </c:if>
             </div>
         </div>        
         <!-- javascript -->

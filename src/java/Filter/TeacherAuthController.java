@@ -107,9 +107,7 @@ public class TeacherAuthController implements Filter {
         User user = account.getUser();
         if (user.getRole() > 3) {
             String path = ((HttpServletRequest) request).getRequestURI();
-            if(path.contains("/student/") || path.contains("/teacher/") || path.contains("/profile/"))
-                httpRequest.getRequestDispatcher("../View/accessdenided.jsp").forward(request, response);
-            else httpRequest.getRequestDispatcher("View/accessdenided.jsp").forward(request, response);
+            httpResponse.sendRedirect(httpRequest.getContextPath()+"/View/accessdenided.jsp");
         } else {
             chain.doFilter(request, response);
         }

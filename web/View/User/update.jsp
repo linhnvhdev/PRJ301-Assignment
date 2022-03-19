@@ -57,7 +57,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                       <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/profile">Thông tin cá nhân</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/profile"><strong>Thông tin cá nhân</strong></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/profile/pwd">Đổi mật khẩu</a>

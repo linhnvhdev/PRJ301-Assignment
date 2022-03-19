@@ -57,7 +57,7 @@
                           <a class="nav-link" href="${pageContext.request.contextPath}/report">Báo cáo</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/Register">Tạo tài khoản</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/Register"><strong>Tạo tài khoản</strong></a>
                         </li>
                       </ul>
                     </div>
@@ -119,8 +119,8 @@
                 <div class="form-group row mt-3">
                     <label class="col-sm-2 col-form-label border" for="gender">Giới tính</label>
                     <div class="col-3">
-                        <input type="radio" name="gender" value = "true">Male
-                        <input type="radio" name="gender" value = "false">Female
+                        <input type="radio" name="gender" value = "true">Nam
+                        <input type="radio" name="gender" value = "false">Nữ
                     </div>
                 </div>
                 <div class="form-group row mt-3">
