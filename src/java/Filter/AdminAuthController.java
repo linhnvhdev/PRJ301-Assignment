@@ -106,7 +106,7 @@ public class AdminAuthController implements Filter {
         Account account = (Account) httpRequest.getSession().getAttribute("account");
         User user = account.getUser();
         if(user.getRole() != 1){
-            httpRequest.getRequestDispatcher("View/accessdenided.jsp").forward(request, response);
+            httpResponse.sendRedirect(httpRequest.getContextPath()+"/View/accessdenided.jsp");
         }
         else{
             chain.doFilter(request, response);

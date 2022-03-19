@@ -106,10 +106,7 @@ public class ManagerAuthFilter implements Filter {
         Account account = (Account) httpRequest.getSession().getAttribute("account");
         User user = account.getUser();
         if (user.getRole() > 2) {
-            String path = ((HttpServletRequest) request).getRequestURI();
-            if(path.contains("/student/") || path.contains("/teacher/") || path.contains("/profile/"))
-                httpRequest.getRequestDispatcher("../View/accessdenided.jsp").forward(request, response);
-            else httpRequest.getRequestDispatcher("View/accessdenided.jsp").forward(request, response);
+            httpResponse.sendRedirect(httpRequest.getContextPath()+"/View/accessdenided.jsp");
         } else {
             chain.doFilter(request, response);
         }

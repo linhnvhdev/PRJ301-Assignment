@@ -57,7 +57,7 @@
                           <a class="nav-link" href="${pageContext.request.contextPath}/home">Home</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/student/search">Học sinh</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/student/search"><strong>Học sinh</strong></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list">Giáo viên</a>

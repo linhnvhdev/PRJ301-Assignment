@@ -33,6 +33,12 @@
                 return date.getDate()+"/"+(date.getMonth()+1);
             }
             
+            function submitForm(){
+                let form = document.getElementById('searchform');
+                form.elements['reportAttendance'].value="${requestScope.reportAttendance}";
+                document.getElementById('searchform').submit();
+            }
+            
         </script>
     </head>
     <body>
@@ -64,7 +70,7 @@
                           <a class="nav-link" href="${pageContext.request.contextPath}/order">Đóng tiền</a>
                         </li>                
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/report">Báo cáo</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/report"><strong>Báo cáo</strong></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/Register">Tạo tài khoản</a>
@@ -90,20 +96,30 @@
             </div>        
         </div>
         <div class="container-fluid mt-3"> 
-            <form action="order" method="GET" class="container-fluid">
+            <form action="report" method="GET" id="searchform" class="container-fluid">
                 <div>
                     <label for="monthForm">Tháng:</label>
-                    <select name="month" id="monthForm" onchange="this.form.submit()">
+                    <select name="month" id="monthForm" onchange="submitForm()">
                         <c:forEach var="i" begin="1" end="12">
                             <option value="${i}" ${(month == i)?"selected=\"selected\"":""}>${i}</option>
                         </c:forEach>
                     </select>
                     <label class="ml-6" for="yearForm">Năm:</label>
-                    <select class="mt-4" name="year" id="yearForm" onchange="this.form.submit()">
+                    <select class="mt-4" name="year" id="yearForm" onchange="submitForm()">
                         <c:forEach var="i" begin="${year-1}" end="${year}">
                             <option value="${i}" ${(year == i)?"selected=\"selected\"":""}>${i}</option>
                         </c:forEach>
                     </select>
+                    <div>
+                        <c:if test="${!requestScope.reportAttendance}">
+                            <input type="hidden" name="reportAttendance" value="true">
+                            <input class="btn btn-danger border border-dark mt-4" type="submit" value="Xem báo cáo điểm danh">
+                        </c:if>
+                        <c:if test="${requestScope.reportAttendance}">
+                            <input type="hidden" name="reportAttendance" value="false">
+                            <input class="btn btn-danger border border-dark mt-4" type="submit" value="Xem báo cáo tổng quát">
+                        </c:if>
+                    </div>    
                 </div>    
             </form>
             <c:if test="${requestScope.students.size() == 0}">
@@ -112,64 +128,85 @@
                 </div>  
             </c:if>
             <c:if test="${requestScope.students.size() > 0}">
-                <table class="table table-bordered table-striped border mt-4">
-                    <tr border>
-                        <th>ID</th>
-                        <th>Tên</th>
-                        <th>Lớp</th>
-                    <script>
-                        var days = getDaysInMonth(${month},${year});
-                        for(let i = 0;i < days.length;i++){
-                            if(days[i].getDay() > 0 && days[i].getDay() < 6){
-                                window.console.log(days[i].getTime());
-                                window.console.log(today.getTime());
-                                window.console.log(days[i].getTime() === today.getTime());
-                                if(days[i].getDate() === today.getDate()){
-                                    document.write("<th>"+myGetDate(days[i])+"(Hôm nay)</th>\n");
+                <c:if test="${requestScope.reportAttendance}">
+                    <table class="table table-bordered table-striped border mt-4">
+                        <tr border>
+                            <th>ID</th>
+                            <th>Tên</th>
+                            <th>Lớp</th>
+                        <script>
+                            var days = getDaysInMonth(${month},${year});
+                            for(let i = 0;i < days.length;i++){
+                                if(days[i].getDay() > 0 && days[i].getDay() < 6){
+                                    if(days[i].getDate() === today.getDate() && days[i].getMonth() === today.getMonth()){
+                                        document.write("<th>"+myGetDate(days[i])+"(Hôm nay)</th>\n");
+                                    }
+                                    else
+                                        document.write("<th>"+myGetDate(days[i])+"</th>\n");
                                 }
-                                else
-                                    document.write("<th>"+myGetDate(days[i])+"</th>\n");
                             }
-                        }
-                    </script>
-                    <th>Tổng số ngày ăn</th>
-                    <th>Tiền đóng</th>
-                    <th>Thừa/Thiếu</th>
-                    </tr>
-                    <c:forEach items="${requestScope.students}" var="s">
-                    <tr>
-                        <td>${s.id}</td>
-                        <td>${s.name}</td>
-                        <td>${s.classes.name}</td>
-                    <script>
-                        <c:forEach var="i" begin="0" end="${requestScope.daysInMonth-1}">
-                            if(days[${i}].getDay() > 0 && days[${i}].getDay() < 6){
-                                    let a = ${requestScope.attendances.get(s.id).get(i)};
-                                    if(a === -1) document.write("<td class=\"bg-secondary border border-white\">"+"</td>");
-                                    if(a === 0)  document.write("<td class=\"bg-danger border border-white\">"+"</td>");
-                                    if(a === 1)  document.write("<td class=\"bg-success border border-white\">"+"</td>");
-                            }
-                        </c:forEach>
-                    </script>
-                    <td>${requestScope.totalAttendance.get(s.id)}</td>
-                    <td>${requestScope.orders.get(s.id)?initParam.MoneyPerMonth:"Chưa đóng"}</td>
-                    <td>${(requestScope.orders.get(s.id)?initParam.MoneyPerMonth:0)-requestScope.totalAttendance.get(s.id)*initParam.MoneyPerDay}</td>
-                    </tr>
-                    </c:forEach>
-                    <tr>
-                        <td colspan="3">Tổng</td>
+                        </script>
+                            <th>Tổng</th>
+                        </tr>
+                        <c:forEach items="${requestScope.students}" var="s">
+                        <tr>
+                            <td>${s.id}</td>
+                            <td>${s.name}</td>
+                            <td>${s.classes.name}</td>
                         <script>
                             <c:forEach var="i" begin="0" end="${requestScope.daysInMonth-1}">
                                 if(days[${i}].getDay() > 0 && days[${i}].getDay() < 6){
-                                        document.write("<td>"+${requestScope.totalPerDay[i]}+"</td>");
+                                        let a = ${requestScope.attendances.get(s.id).get(i)};
+                                        if(a === -1) document.write("<td class=\"bg-secondary border border-white\">"+"</td>");
+                                        if(a === 0)  document.write("<td class=\"bg-danger border border-white\">"+"</td>");
+                                        if(a === 1)  document.write("<td class=\"bg-success border border-white\">"+"</td>");
                                 }
                             </c:forEach>
                         </script>
-                        <td>${requestScope.totalDayEaten}</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
+                        <td>${requestScope.totalAttendance.get(s.id)}</td>
+                        </tr>
+                        </c:forEach>
+                        <tr>
+                            <td colspan="3">Tổng</td>
+                            <script>
+                                <c:forEach var="i" begin="0" end="${requestScope.daysInMonth-1}">
+                                    if(days[${i}].getDay() > 0 && days[${i}].getDay() < 6){
+                                            document.write("<td>"+${requestScope.totalPerDay[i]}+"</td>");
+                                    }
+                                </c:forEach>
+                            </script>
+                            <td>${requestScope.totalDayEaten}</td>
+                        </tr>
+                    </table>
+                </c:if>
+                <c:if test="${!requestScope.reportAttendance}">
+                    <table class="table table-bordered table-striped border mt-4">
+                        <tr border>
+                            <th>ID</th>
+                            <th>Tên</th>
+                            <th>Lớp</th>
+                            <th>Tổng số ngày ăn</th>
+                            <th>Tiền đóng</th>
+                            <th>Thừa/Thiếu</th>
+                        </tr>
+                        <c:forEach items="${requestScope.students}" var="s">
+                        <tr>
+                            <td>${s.id}</td>
+                            <td>${s.name}</td>
+                            <td>${s.classes.name}</td>
+                            <td>${requestScope.totalAttendance.get(s.id)}</td>
+                            <td>${requestScope.orders.get(s.id)?initParam.MoneyPerMonth:"Chưa đóng"}</td>
+                            <td>${(requestScope.orders.get(s.id)?initParam.MoneyPerMonth:0)-requestScope.totalAttendance.get(s.id)*initParam.MoneyPerDay}</td>
+                        </tr>
+                        </c:forEach>
+                        <tr>
+                            <td colspan="3">Tổng</td>
+                            <td>${requestScope.totalDayEaten}</td>
+                            <td>${requestScope.totalMoneyPay}</td>
+                            <td>${requestScope.totalLeft}</td>
+                        </tr>
+                    </table>    
+                </c:if>
             </c:if>
         </div>    
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>                    

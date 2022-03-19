@@ -30,7 +30,7 @@
                           <a class="nav-link" href="${pageContext.request.contextPath}/home">Home</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/student/search">Học sinh</a>
+                          <a class="nav-link" href="${pageContext.request.contextPath}/student/search"><strong>Học sinh</strong></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list">Giáo viên</a>
@@ -93,10 +93,10 @@
                     <div class="col-3">
                         <input id="gender" type="radio"
                             ${(requestScope.student.sex)?"checked":""}
-                            name="gender" value = "true">Male
+                            name="gender" value = "true">Nam
                         <input id="gender" type="radio" 
                             ${(!requestScope.student.sex)?"checked":""}
-                            name="gender" value = "false">Female
+                            name="gender" value = "false">Nữ
                     </div>
                 </div>
                 <div class="form-group row mt-3">

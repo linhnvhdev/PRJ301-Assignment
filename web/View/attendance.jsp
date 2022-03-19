@@ -36,13 +36,13 @@
                           <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list">Giáo viên</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/attendance">Điểm danh</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/attendance"><strong>Điểm danh</strong></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/order">Đóng tiền</a>
                         </li>                
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/report">Báo cáo</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/report">Báo cáo</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/Register">Tạo tài khoản</a>

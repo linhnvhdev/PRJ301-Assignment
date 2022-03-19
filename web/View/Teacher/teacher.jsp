@@ -59,7 +59,7 @@
                           <a class="nav-link" href="${pageContext.request.contextPath}/student/search">Học sinh</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list">Giáo viên</a>
+                          <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list"><strong>Giáo viên</strong></a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="${pageContext.request.contextPath}/attendance">Điểm danh</a>
