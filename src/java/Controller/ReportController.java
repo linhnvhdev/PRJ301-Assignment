@@ -17,6 +17,7 @@ import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -76,10 +77,11 @@ public class ReportController extends HttpServlet {
         int totalMoneyPay = 0;
         int totalLeft = 0;
         
+        Collections.sort(students);
+        
         for(Student s: students){
             boolean status =oDB.getOrder(s.getId(),month,year);
             orders.put(s.getId(),status);
-            totalMoneyPay += (status?moneyPerMonth:0);
         }
         
         for(Student s: students){
