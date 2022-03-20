@@ -10,6 +10,7 @@ import Dal.ClassDBContext;
 import Dal.StudentDBContext;
 import Dal.UserDBContext;
 import Model.Classes;
+import MyUtils.VietnameseUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class InsertStudent extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get raw data
+        request.setCharacterEncoding("utf-8");
         String raw_name = request.getParameter("name");
         String raw_gender = request.getParameter("gender");
         String raw_classId = request.getParameter("classId");
@@ -71,7 +73,8 @@ public class InsertStudent extends HttpServlet {
         
         int userId = userDB.insertUser(name, gender, phoneNumber, "none", "student");
         int studentId = studentDB.insertStudent(classId,userId,roomId);
-        accountDB.createAccount(name.replaceAll("\\s","")+studentId,"12345678", userId);
+        String newUserName = VietnameseUtil.removeAccent(name).replaceAll("\\s","")+studentId;
+        accountDB.createAccount(newUserName,"12345678", userId);
         response.sendRedirect("search");
     }
 

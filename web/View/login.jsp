@@ -17,9 +17,12 @@
     </head>
     <body>
         <!-- header -->
-        <div class="container-fluid bg-light header pt-4" >
+        <div class="container-fluid bg-light header" >
             <div class="row pl-9">
-                <div class="col-9 "><h3>Hệ thống quản lí bán trú trường THCS Lê Quý Đôn</h3></div>
+                <div class="col-9 h3">
+                    <img class="img-fluid" src="${pageContext.request.contextPath}/imgs/SchoolLogo.png" alt="SchoolLogo" width="90" height="100" />
+                    Hệ thống quản lí bán trú trường THCS Lê Quý Đôn
+                </div>
                 <div class="col-3 d-flex justify-content-end"></div>
             </div>
         </div>

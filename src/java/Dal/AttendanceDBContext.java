@@ -97,5 +97,17 @@ public class AttendanceDBContext extends DBContext {
             Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public void delete(int studentId) {
+        try {
+            String sql="DELETE FROM [PRJ301-Assignment].[dbo].[Attendance]\n" +
+                    "      WHERE StudentId = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, studentId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
 }

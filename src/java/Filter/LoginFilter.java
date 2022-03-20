@@ -104,7 +104,7 @@ public class LoginFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         Account account = (Account) httpRequest.getSession().getAttribute("account");
         String path = ((HttpServletRequest) request).getRequestURI();
-        if(account == null && !path.contains("/login") && !path.contains("css")){
+        if(account == null && !path.contains("/login") && !path.contains("css") && !path.contains("imgs")){
               httpResponse.sendRedirect(httpRequest.getContextPath()+"/login");  
         }
         else{

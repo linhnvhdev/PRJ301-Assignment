@@ -60,6 +60,7 @@ public class UpdateTeacher extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get raw data
+        request.setCharacterEncoding("utf-8");
         String raw_teacherId = request.getParameter("teacherId");
         String raw_name = request.getParameter("name");
         String raw_gender = request.getParameter("gender");
