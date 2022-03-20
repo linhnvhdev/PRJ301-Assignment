@@ -45,6 +45,7 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         String raw_role = request.getParameter("role");
         String raw_username = request.getParameter("username");
         String raw_password = request.getParameter("password");
@@ -67,13 +68,16 @@ public class Register extends HttpServlet {
         UserDBContext userDB = new UserDBContext();
         
         if(accDB.isAccountExist(username)){
-            response.getWriter().print("Tài khoản đã tồn tại");
-            request.getRequestDispatcher("View/register.jsp").include(request, response);
+            boolean accountExistError = true;
+            request.setAttribute("accountExistError", accountExistError);
+            request.getRequestDispatcher("View/register.jsp").forward(request, response);
         }
         else{
             int userId = userDB.insertUser(name, gender, phoneNumber, gmail, role);
             accDB.createAccount(username,password,userId);
-            response.getWriter().print("Đăng kí thành công");
+            boolean RegisterSuccess = true;
+            request.setAttribute("registerSuccess", RegisterSuccess);
+            request.getRequestDispatcher("View/register.jsp").forward(request, response);
         }
     }
 

@@ -17,7 +17,7 @@
             function validateForm(){
                 let password = document.forms["registerForm"]["password"].value;
                 let retypePassword = document.forms["registerForm"]["retypePassword"].value;
-                if(password !== retypePassword){
+                if(password != retypePassword){
                     alert("mật khẩu nhập lại sai");
                     return false;
                 }
@@ -26,10 +26,13 @@
     </head>
     <body>
         <!-----------------------------  Heading---------------------------- -->
-        <div class="container-fluid header pt-4" >
+        <div class="container-fluid header" >
             <div class="row pl-9">
-                <div class="col-9 "><h3>Hệ thống quản lí bán trú trường THCS Lê Quý Đôn</h3></div>
-                <div class="col-3 d-flex justify-content-end login-link">Chào ${sessionScope.account.user.name}</div>
+                <div class="col-9 h3">
+                    <img class="img-fluid" src="${pageContext.request.contextPath}/imgs/SchoolLogo.png" alt="SchoolLogo" width="90" height="90" />
+                    Hệ thống quản lí bán trú trường THCS Lê Quý Đôn
+                </div>
+                <div class="col-3 d-flex align-items-center justify-content-end login-link">Chào ${sessionScope.account.user.name}</div>
             </div>
         </div>
         <!-----------------------------  Nav bar---------------------------- -->
@@ -79,7 +82,10 @@
                 </nav>        
             </div>        
         </div>
-        <div class="container-fluid mt-3 bg-light">               
+        <div class="container-fluid mt-3 bg-light">
+            <c:if test="${requestScope.registerSuccess != null}">
+                <div class="text-success">Đăng kí thành công</div>
+            </c:if>
             <form name="registerForm" action="Register" method="POST" onsubmit="return validateForm()">
                 <div class="form-group row mt-3">
                     <label class="col-2 border col-form-label" for="role">Loại tài khoản:</label>
@@ -97,17 +103,20 @@
                     <div class="col-3">
                         <input class="form-control" type="text" id="username" name="username" required="true">
                     </div>
+                    <c:if test="${requestScope.accountExistError != null}">
+                        <div class="text-danger">Tài khoản đã tồn tại</div>
+                    </c:if>
                 </div>
                 <div class="form-group row mt-3">
                     <label for="passwordNew" class="col-sm-2 border col-form-label">Mật khẩu mới:</label>
                     <div class="col-sm-3">
-                        <input class="form-control" type="password" id="passwordNew" name="passwordNew" required="true">
+                        <input class="form-control" type="password" id="passwordNew" name="password" required="true">
                     </div>
                 </div>
                 <div class="form-group row mt-3">
                     <label for="retypePasswordNew" class="col-sm-2 border col-form-label">Nhập lại mật khẩu mới:</label>
                     <div class="col-sm-3">
-                        <input class="form-control" type="password" id="retypePasswordNew" name="retypePasswordNew" required="true">
+                        <input class="form-control" type="password" id="retypePasswordNew" name="retypePassword" required="true">
                     </div>
                 </div>
                 <div class="form-group row mt-3"> 

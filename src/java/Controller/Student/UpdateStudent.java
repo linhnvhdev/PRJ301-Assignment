@@ -58,6 +58,7 @@ public class UpdateStudent extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
         Account account = (Account) request.getSession().getAttribute("account");
         // Get raw data
         String raw_studentId = request.getParameter("studentId");

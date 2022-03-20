@@ -14,10 +14,13 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     </head>
     <body>
-        <div class="container-fluid header pt-4" >
+        <div class="container-fluid header" >
             <div class="row pl-9">
-                <div class="col-9 "><h3>Hệ thống quản lí bán trú trường THCS Lê Quý Đôn</h3></div>
-                <div class="col-3 d-flex justify-content-end login-link">Chào ${sessionScope.account.user.name}</div>
+                <div class="col-9 h3">
+                    <img class="img-fluid" src="${pageContext.request.contextPath}/imgs/SchoolLogo.png" alt="SchoolLogo" width="90" height="90" />
+                    Hệ thống quản lí bán trú trường THCS Lê Quý Đôn
+                </div>
+                <div class="col-3 d-flex align-items-center justify-content-end login-link">Chào ${sessionScope.account.user.name}</div>
             </div>
         </div>
         <!-----------------------------  Nav bar---------------------------- -->

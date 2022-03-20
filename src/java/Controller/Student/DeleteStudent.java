@@ -6,6 +6,8 @@
 package Controller.Student;
 
 import Dal.AccountDBContext;
+import Dal.AttendanceDBContext;
+import Dal.OrderDBContext;
 import Dal.StudentDBContext;
 import Dal.UserDBContext;
 import java.io.IOException;
@@ -37,7 +39,11 @@ public class DeleteStudent extends HttpServlet {
         UserDBContext userDB = new UserDBContext();
         StudentDBContext studentDB = new StudentDBContext();
         AccountDBContext accDB = new AccountDBContext();
+        AttendanceDBContext aDB = new AttendanceDBContext();
+        OrderDBContext oDB = new OrderDBContext();
         int userId = studentDB.getUser(studentId);
+        aDB.delete(studentId);
+        oDB.delete(studentId);
         studentDB.delete(studentId);
         accDB.deleteAccount(userId);
         userDB.delete(userId);
